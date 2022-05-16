@@ -21,6 +21,7 @@ Hence ssh has to be enabled during flashing.
 e.g.: `ssh-copy-id -i ~/.ssh/id_rsa.pub pi@raspberrypi.local`
 
 In my case:
+
 `ssh-copy-id -i ~/.ssh/id_rsa.pub pi@berry-main.local`
 
 `ssh-copy-id -i ~/.ssh/id_rsa.pub pi@berry-n1.local`
