@@ -22,6 +22,8 @@ e.g.: `ssh-copy-id -i ~/.ssh/id_rsa.pub pi@raspberrypi.local`
 
 In my case:
 `ssh-copy-id -i ~/.ssh/id_rsa.pub pi@berry-main.local`
+
 `ssh-copy-id -i ~/.ssh/id_rsa.pub pi@berry-n1.local`
+
 `ssh-copy-id -i ~/.ssh/id_rsa.pub pi@berry-n2.local`
 
