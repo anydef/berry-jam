@@ -28,3 +28,7 @@ In my case:
 
 `ssh-copy-id -i ~/.ssh/id_rsa.pub pi@berry-n2.local`
 
+`ssh-copy-id -i ~/.ssh/id_rsa.pub pi@berry-n3.local`
+
+4. Deploy k3s via ansible
+`cd ansible && ansible-playbook -i hosts k3s.yaml`

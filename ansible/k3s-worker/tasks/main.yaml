@@ -1,0 +1,17 @@
+---
+- name: Lof worker node info.
+  debug:
+    msg: "Provisioning k3s worker node. Host: {{ ansible_host }}. Hostname {{ ansible_hostname }}"
+
+
+- name:
+  debug:
+    msg: "[Worker] K8S_TOKEN_HOLDER K8S token is {{ hostvars['k8s_token_holder']['token'] }} from {{ hostvars['k8s_token_holder']['ip'] }}"
+
+- name: Install k3s worker.
+  shell: >
+    curl -sfL https://get.k3s.io | \ 
+      K3S_NODE_NAME="{{ ansible_hostname }}" \
+      K3S_URL="https://{{ hostvars['k8s_token_holder']['ip'] }}:6443" \
+      K3S_TOKEN="{{ hostvars['k8s_token_holder']['token'] }}" \ 
+      sh -

@@ -1,0 +1,27 @@
+---
+- name: Log Linux distro
+  debug:
+    msg: "The distro is: {{ ansible_distribution|lower }} and the version name is: {{ ansible_distribution_release }}"
+
+- name: Update apt packages
+  become: true
+  apt:
+    upgrade: yes
+    update_cache: yes
+    autoremove: yes
+    cache_valid_time: 86400 #One day
+
+
+- name: Install a list of packages [{{ pkgstoinstall }}]
+  apt:
+    name: "{{ pkgstoinstall }}"
+    state: latest
+    allow_unauthenticated: true
+    update_cache: yes
+    autoremove: yes
+
+- name: Update memory cgroup config
+  shell: grep -qxF 'cgroup_memory=1 cgroup_enable=memory' /boot/cmdline.txt || echo ' cgroup_memory=1 cgroup_enable=memory' >> /boot/cmdline.txt
+
+- name: Reboot to apply memory cgroup config
+  reboot:

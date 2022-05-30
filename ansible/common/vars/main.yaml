@@ -1,0 +1,12 @@
+---
+pkgstoinstall:
+  - libffi-dev
+  - python3
+  - python3-pip
+  - software-properties-common
+  - gnupg2
+  - curl
+  - wget
+  - vim
+  - ca-certificates
+  - apt-transport-https

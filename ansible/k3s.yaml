@@ -1,0 +1,33 @@
+---
+- hosts: all
+  become: yes
+  roles:
+    - { role: common, tags: common }
+
+  tasks:
+    - name: Ready
+      debug:
+        msg:
+          - "Common role is ready!"
+
+- hosts: controller
+  become: yes
+  roles:
+    - { role: k3s-controller, tags: k3s-controller }
+
+  tasks:
+    - name: Ready
+      debug:
+        msg:
+          - "k3s-controller is ready!"
+
+- hosts: worker
+  become: yes
+  roles:
+    - { role: k3s-worker, tags: k3s-worker }
+
+  tasks:
+    - name: Ready
+      debug:
+        msg:
+          - "k3s-worker is ready!"
