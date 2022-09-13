@@ -1,5 +1,5 @@
 ---
-- name: Lof worker node info.
+- name: Log worker node info.
   debug:
     msg: "Provisioning k3s worker node. Host: {{ ansible_host }}. Hostname {{ ansible_hostname }}"
 

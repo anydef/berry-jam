@@ -1,0 +1,32 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: ServersTransport
+metadata:
+  name: kubernetes-dashboard-transport
+  namespace: kubernetes-dashboard
+
+spec:
+  serverName: kubernetes-dashboard
+  insecureSkipVerify: true
+
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: dashboard-ingress
+  namespace: kubernetes-dashboard
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+    traefik.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /dashboard
+            pathType: Prefix
+            backend:
+              service:
+                name: kubernetes-dashboard
+                port:
+                  number: 443

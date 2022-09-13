@@ -21,5 +21,5 @@ rkubectl() { kubectl --kubeconfig ~/.kube/config-berry-k3s $@ }
 
 Test it can connect to the server:
 ```shell
-rkubect get pods 
+rkubectl get pods 
 ```

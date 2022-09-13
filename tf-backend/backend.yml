@@ -1,0 +1,39 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Deploys S3 bucket for TF backend
+
+Resources:
+  BackendBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: terraform-backend-073833284785-eu-central-1
+      Tags:
+        - Key: Name
+          Value: terraform-backend
+  Role:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: terraform-role
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS:
+                - "arn:aws:iam::073833284785:user/PavloFedyna"
+            Action: sts:AssumeRole
+  BucketAccess:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - s3:*
+            Resource:
+              - "arn:aws:s3:::terraform-backend-073833284785-eu-central-1"
+              - "arn:aws:s3:::terraform-backend-073833284785-eu-central-1/*"
+      Roles:
+        - !Ref Role
+

@@ -1,0 +1,6 @@
+*.iml
+*/venv
+*/dist
+*/*.egg-info
+/monitoring/vendor/
+/monitoring/terraform/.terraform/
