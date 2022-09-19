@@ -21,6 +21,3 @@
     name:   "k8s_token_holder"
     token:  "{{ k3s_token.stdout }}"
     ip:  "{{ ansible_host }}"
-
-- name: Install longhorn
-  shell: kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/master/deploy/longhorn.yaml
