@@ -1,40 +1,39 @@
 resource "kubernetes_deployment_v1" "grafana" {
   metadata {
-    name      = "grafana"
-    namespace = kubernetes_namespace.monitoring-namespace.id
+    name      = var.name
+    namespace = var.namespace
   }
   spec {
     replicas = "1"
     selector {
       match_labels = {
-        app : "grafana"
+        app : var.name
       }
     }
     template {
       metadata {
-        name   = "grafana"
+        name   = var.name
         labels = {
-          app : "grafana"
+          app : var.name
         }
       }
       spec {
 
         container {
-          name  = "grafana"
-          image = "anydef/grafana:latest"
+          name  = var.name
+          image = var.grafana_image
           port {
             container_port = 3000
-            #            host_port      = 3000
           }
           resources {
             requests = {
               cpu    = "100m"
-              memory = "250Mi"
+              memory = "200Mi"
             }
           }
           liveness_probe {
             http_get {
-              path = "/grafana/api/health"
+              path = "/${var.context_path}/api/health"
               port = 3000
             }
             initial_delay_seconds = 5
@@ -58,12 +57,12 @@ resource "kubernetes_deployment_v1" "grafana" {
 
 resource "kubernetes_service_v1" "grafana" {
   metadata {
-    name      = "grafana"
-    namespace = kubernetes_namespace.monitoring-namespace.id
+    name      = var.name
+    namespace =var.namespace
   }
   spec {
     selector = {
-      app = "grafana"
+      app = var.name
     }
     port {
       port        = 3000
@@ -75,8 +74,8 @@ resource "kubernetes_service_v1" "grafana" {
 
 resource "kubernetes_ingress_v1" "grafana" {
   metadata {
-    name        = "grafana"
-    namespace   = kubernetes_namespace.monitoring-namespace.id
+    name        = var.name
+    namespace   = var.namespace
     annotations = {
       "kubernetes.io/ingress.class"             = "traefik"
       "traefik.ingress.kubernetes.io/rule-type" = "PathPrefixStrip"
@@ -86,7 +85,7 @@ resource "kubernetes_ingress_v1" "grafana" {
     rule {
       http {
         path {
-          path = "/grafana"
+          path = "/${var.context_path}"
           backend {
             service {
               name = kubernetes_service_v1.grafana.metadata[0].name

@@ -3,6 +3,9 @@
 */dist
 */*.egg-info
 /monitoring/vendor/
-/monitoring/terraform/.terraform/
-*/.terraform.lock.hcl
+*.lock.hcl
 */.terraform
+/monitoring/tf_backend.env
+/monitoring/grafana/.env
+/monitoring/grafana/.terraform/
+/monitoring/tf_configs.env
