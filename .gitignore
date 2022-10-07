@@ -14,3 +14,6 @@
 /monitoring/pushgateway/.terraform/
 /monitoring/state-metrics/.terraform/
 /monitoring/node-exporter/.terraform/
+/.idea/
+/.kube/cache/
+/monitoring/prometheus/.terraform/
