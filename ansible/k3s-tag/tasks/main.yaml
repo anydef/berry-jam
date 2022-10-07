@@ -1,0 +1,16 @@
+---
+- name: Log worker node info.
+  debug:
+    msg: "Tagging nodes. Host: {{ ansible_host }}. Hostname {{ ansible_hostname }}"
+
+
+- name: Assign worker tags.
+  shell: |
+    workers=$(kubectl get nodes -o jsonpath="{.items[*].metadata.name}" --selector='!node-role.kubernetes.io/master')
+    for node in "${workers}"
+    do
+      kubectl label nodes $node kubernetes.io/role=worker --overwrite
+      kubectl label nodes $node node-type=worker --overwrite
+    done
+  args:
+      executable: /bin/bash

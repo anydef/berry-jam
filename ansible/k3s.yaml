@@ -31,3 +31,8 @@
       debug:
         msg:
           - "k3s-worker is ready!"
+
+- hosts: controller
+  become: yes
+  roles:
+    - { role: k3s-tag, tags: [ k3s-tag, k3s-controller ] }
