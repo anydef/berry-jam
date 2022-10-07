@@ -4,3 +4,5 @@
 */*.egg-info
 /monitoring/vendor/
 /monitoring/terraform/.terraform/
+*/.terraform.lock.hcl
+*/.terraform
