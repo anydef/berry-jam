@@ -9,6 +9,7 @@ resource "kubernetes_manifest" "daemonset_monitoring_node_exporter" {
         "app.kubernetes.io/part-of"   = "kube-prometheus"
         "app.kubernetes.io/version"   = "2.4.2"
         "name"                        = "node-exporter"
+        "app"                         = "node-exporter"
       }
       "name"      = "node-exporter"
       "namespace" = var.namespace
@@ -34,7 +35,6 @@ resource "kubernetes_manifest" "daemonset_monitoring_node_exporter" {
           "containers" = [
             {
               "args" = [
-                "--web.listen-address=127.0.0.1:9100",
                 "--path.sysfs=/host/sys",
                 "--path.rootfs=/host/root",
                 "--no-collector.wifi",
@@ -43,8 +43,14 @@ resource "kubernetes_manifest" "daemonset_monitoring_node_exporter" {
                 "--collector.netclass.ignored-devices=^(veth.*)$",
                 "--collector.netdev.device-exclude=^(veth.*)$",
               ]
-              "image"     = "quay.io/prometheus/node-exporter:v1.3.1"
-              "name"      = "node-exporter"
+              "image" = "quay.io/prometheus/node-exporter:latest"
+              "name"  = "node-exporter"
+              "ports" = [
+                {
+                  "containerPort" = 9100
+                  "protocol"      = "TCP"
+                },
+              ]
               "resources" = {
                 "limits" = {
                   "cpu"    = "250m"
@@ -70,60 +76,18 @@ resource "kubernetes_manifest" "daemonset_monitoring_node_exporter" {
                 },
               ]
             },
-            {
-              "args" = [
-                "--logtostderr",
-                "--secure-listen-address=[$(IP)]:9100",
-                "--tls-cipher-suites=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305",
-                "--upstream=https://127.0.0.1:9100/",
-              ]
-              "env" = [
-                {
-                  "name"      = "IP"
-                  "valueFrom" = {
-                    "fieldRef" = {
-                      "fieldPath" = "status.podIP"
-                    }
-                  }
-                },
-              ]
-              "image" = "quay.io/brancz/kube-rbac-proxy:v0.12.0"
-              "name"  = "kube-rbac-proxy"
-              "ports" = [
-                {
-                  "containerPort" = 9100
-                  "hostPort"      = 9100
-                  "name"          = "https"
-                },
-              ]
-              "resources" = {
-                "limits" = {
-                  "cpu"    = "50m"
-                  "memory" = "100Mi"
-                }
-                "requests" = {
-                  "cpu"    = "20m"
-                  "memory" = "50Mi"
-                }
-              }
-              "securityContext" = {
-                "runAsGroup"   = 65532
-                "runAsNonRoot" = true
-                "runAsUser"    = 65532
-              }
-            },
           ]
           "hostNetwork"  = true
           "hostPID"      = true
           "nodeSelector" = {
             "kubernetes.io/os" = "linux"
           }
-          "securityContext" = {
-            "runAsNonRoot" = true
-            "runAsUser"    = 65534
-          }
-          "serviceAccountName" = "node-exporter"
-          "tolerations"        = [
+          #          "securityContext" = {
+          #            "runAsNonRoot" = true
+          #            "runAsUser"    = 65534
+          #          }
+          #          "serviceAccountName" = "node-exporter"
+          "tolerations" = [
             {
               "operator" = "Exists"
             },
@@ -144,12 +108,12 @@ resource "kubernetes_manifest" "daemonset_monitoring_node_exporter" {
           ]
         }
       }
-      "updateStrategy" = {
-        "rollingUpdate" = {
-          "maxUnavailable" = "50%"
-        }
-        "type" = "RollingUpdate"
-      }
+      #      "updateStrategy" = {
+      #        "rollingUpdate" = {
+      #          "maxUnavailable" = "100%"
+      #        }
+      #        "type" = "RollingUpdate"
+      #      }
     }
   }
 }

@@ -5,6 +5,7 @@ resource "kubernetes_manifest" "servicemonitor_monitoring_pushgateway" {
     "metadata"   = {
       "labels" = {
         "app.kubernetes.io/name" = "pushgateway"
+        "app"                    = "pushgateway"
         "name"                   = "pushgateway"
       }
       "name"      = "pushgateway"
@@ -13,13 +14,11 @@ resource "kubernetes_manifest" "servicemonitor_monitoring_pushgateway" {
     "spec" = {
       "endpoints" = [
         {
-#          "enabled"           = true
-          "interval"          = "1m"
+          "interval"          = "15s"
           "port"              = "http"
           "relabelings"       = []
           "metricRelabelings" = []
           "honorLabels"       = true
-          "scheme"            = "http"
         },
       ]
       "jobLabel" = "app.kubernetes.io/name"

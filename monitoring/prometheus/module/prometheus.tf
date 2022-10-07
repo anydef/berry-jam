@@ -27,17 +27,17 @@ resource "kubernetes_manifest" "prometheus_monitoring_prometheus_persistant" {
       "serviceMonitorSelector" = {
         "matchExpressions" = [
           {
-            "key"      = "name"
+            "key"      = "app"
             "operator" = "In"
             "values"   = [
               "kube-state-metrics",
               "node-exporter",
               "kubelet",
               "traefik",
-#              "grafana",
               "pushgateway"
+#              "grafana",
             ]
-          },
+          }
         ]
       }
       "storage" = {

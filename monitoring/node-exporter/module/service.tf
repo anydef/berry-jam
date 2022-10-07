@@ -13,9 +13,10 @@ resource "kubernetes_manifest" "service_monitoring_node_exporter" {
       "clusterIP" = "None"
       "ports"     = [
         {
-          "name"       = "https"
+          "name"       = "node-exporter"
+          "protocol"   = "TCP"
           "port"       = 9100
-          "targetPort" = "https"
+          "targetPort" = 9100
         },
       ]
       "selector" = {

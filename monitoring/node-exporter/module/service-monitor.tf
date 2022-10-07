@@ -6,6 +6,7 @@ resource "kubernetes_manifest" "servicemonitor_monitoring_node_exporter" {
       "labels" = {
         "app.kubernetes.io/name" = "node-exporter"
         "name"                   = "node-exporter"
+        "app"                    = "node-exporter"
       }
       "name"      = "node-exporter"
       "namespace" = var.namespace
@@ -15,7 +16,7 @@ resource "kubernetes_manifest" "servicemonitor_monitoring_node_exporter" {
         {
           "bearerTokenFile" = "/var/run/secrets/kubernetes.io/serviceaccount/token"
           "interval"        = "15s"
-          "port"            = "https"
+          "port"            = "node-exporter"
           "relabelings"     = [
             {
               "action"       = "replace"
@@ -27,10 +28,6 @@ resource "kubernetes_manifest" "servicemonitor_monitoring_node_exporter" {
               "targetLabel" = "instance"
             },
           ]
-          "scheme"    = "https"
-          "tlsConfig" = {
-            "insecureSkipVerify" = true
-          }
         },
       ]
       "jobLabel" = "app.kubernetes.io/name"

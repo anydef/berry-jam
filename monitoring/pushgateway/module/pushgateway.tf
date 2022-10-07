@@ -2,6 +2,10 @@ resource "kubernetes_deployment_v1" "pushgateway" {
   metadata {
     name      = var.name
     namespace = var.namespace
+    labels    = {
+      app : var.name
+      name : var.name
+    }
   }
   spec {
     replicas = "1"
@@ -14,7 +18,9 @@ resource "kubernetes_deployment_v1" "pushgateway" {
       metadata {
         name   = var.name
         labels = {
-          app : var.name
+          "app.kubernetes.io/name" = var.name
+          app                    = var.name
+          name                   = var.name
         }
       }
       spec {
@@ -22,6 +28,7 @@ resource "kubernetes_deployment_v1" "pushgateway" {
           name  = var.name
           image = var.image
           port {
+            name           = "http"
             container_port = 9091
           }
           resources {
@@ -48,12 +55,19 @@ resource "kubernetes_service_v1" "pushgateway" {
   metadata {
     name      = var.name
     namespace = var.namespace
+    labels    = {
+      "app.kubernetes.io/name" = var.name
+      app                    = var.name
+      name                   = var.name
+    }
   }
   spec {
     selector = {
       app = var.name
     }
     port {
+      name        = "http"
+      protocol    = "TCP"
       port        = 9091
       target_port = 9091
     }
@@ -78,7 +92,7 @@ resource "kubernetes_ingress_v1" "pushgateway" {
           backend {
             service {
               name = kubernetes_service_v1.pushgateway.metadata[0].name
-              port { number = 3000 }
+              port { number = 9091 }
             }
           }
         }
