@@ -5,5 +5,5 @@ module "grafana" {
   storage       = var.storage
   nfs_path      = var.nfs_path
   nfs_server    = var.nfs_server
-  grafana_image = var.image
+  grafana_image = var.grafana_image
 }

@@ -18,6 +18,6 @@ variable "nfs_server" {
   type = string
 }
 
-variable "image" {
+variable "grafana_image" {
   type = string
 }

@@ -10,10 +10,10 @@ init:
 
 
 build:
-	docker buildx build --no-cache --push --platform linux/arm/v7,linux/arm/v8,linux/amd64 -t ${grafana_image} .
+	docker buildx build --no-cache --push --platform linux/arm/v7,linux/arm/v8,linux/amd64 -t ${TF_VAR_grafana_image} .
 
+	#TF_VAR_nfs_server=${nfs_server} TF_VAR_nfs_path=${nfs_path} TF_VAR_storage=${storage} TF_VAR_image=${grafana_image} \
 deploy: init
-	TF_VAR_nfs_server=${nfs_server} TF_VAR_nfs_path=${nfs_path} TF_VAR_storage=${storage} TF_VAR_image=${grafana_image} \
 	terraform apply -auto-approve -lock=false
 
 run: build deploy
