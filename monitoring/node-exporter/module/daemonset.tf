@@ -7,7 +7,7 @@ resource "kubernetes_manifest" "daemonset_monitoring_node_exporter" {
         "app.kubernetes.io/component" = "exporter"
         "app.kubernetes.io/name"      = "node-exporter"
         "app.kubernetes.io/part-of"   = "kube-prometheus"
-        "app.kubernetes.io/version"   = "1.1.0"
+        "app.kubernetes.io/version"   = "2.4.2"
         "name"                        = "node-exporter"
       }
       "name"      = "node-exporter"
@@ -27,7 +27,7 @@ resource "kubernetes_manifest" "daemonset_monitoring_node_exporter" {
             "app.kubernetes.io/component" = "exporter"
             "app.kubernetes.io/name"      = "node-exporter"
             "app.kubernetes.io/part-of"   = "kube-prometheus"
-            "app.kubernetes.io/version"   = "1.1.0"
+            "app.kubernetes.io/version"   = "2.4.2"
           }
         }
         "spec" = {
@@ -98,12 +98,12 @@ resource "kubernetes_manifest" "daemonset_monitoring_node_exporter" {
               ]
               "resources" = {
                 "limits" = {
-                  "cpu"    = "20m"
-                  "memory" = "40Mi"
+                  "cpu"    = "50m"
+                  "memory" = "100Mi"
                 }
                 "requests" = {
-                  "cpu"    = "10m"
-                  "memory" = "20Mi"
+                  "cpu"    = "20m"
+                  "memory" = "50Mi"
                 }
               }
               "securityContext" = {
@@ -146,7 +146,7 @@ resource "kubernetes_manifest" "daemonset_monitoring_node_exporter" {
       }
       "updateStrategy" = {
         "rollingUpdate" = {
-          "maxUnavailable" = "10%"
+          "maxUnavailable" = "50%"
         }
         "type" = "RollingUpdate"
       }
