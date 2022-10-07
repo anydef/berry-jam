@@ -1,0 +1,26 @@
+resource "kubernetes_manifest" "clusterrolebinding_prometheus_operator" {
+  manifest = {
+    "apiVersion" = "rbac.authorization.k8s.io/v1"
+    "kind" = "ClusterRoleBinding"
+    "metadata" = {
+      "labels" = {
+        "app.kubernetes.io/component" = "controller"
+        "app.kubernetes.io/name" = "prometheus-operator"
+        "app.kubernetes.io/version" = "0.59.2"
+      }
+      "name" = "prometheus-operator"
+    }
+    "roleRef" = {
+      "apiGroup" = "rbac.authorization.k8s.io"
+      "kind" = "ClusterRole"
+      "name" = "prometheus-operator"
+    }
+    "subjects" = [
+      {
+        "kind" = "ServiceAccount"
+        "name" = "prometheus-operator"
+        "namespace" = var.namespace
+      },
+    ]
+  }
+}

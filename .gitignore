@@ -9,3 +9,8 @@
 /monitoring/grafana/.env
 /monitoring/grafana/.terraform/
 /monitoring/tf_configs.env
+/monitoring/namespace/.terraform/
+/monitoring/prometheus-operator/.terraform/
+/monitoring/pushgateway/.terraform/
+/monitoring/state-metrics/.terraform/
+/monitoring/node-exporter/.terraform/

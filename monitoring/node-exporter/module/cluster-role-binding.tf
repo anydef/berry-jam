@@ -1,0 +1,21 @@
+resource "kubernetes_manifest" "clusterrolebinding_node_exporter" {
+  manifest = {
+    "apiVersion" = "rbac.authorization.k8s.io/v1"
+    "kind"       = "ClusterRoleBinding"
+    "metadata"   = {
+      "name" = "node-exporter"
+    }
+    "roleRef" = {
+      "apiGroup" = "rbac.authorization.k8s.io"
+      "kind"     = "ClusterRole"
+      "name"     = "node-exporter"
+    }
+    "subjects" = [
+      {
+        "kind"      = "ServiceAccount"
+        "name"      = "node-exporter"
+        "namespace" = var.namespace
+      },
+    ]
+  }
+}

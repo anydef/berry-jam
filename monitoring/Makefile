@@ -8,11 +8,40 @@ include $(CONFIGS_ENV)
 
 export
 
-setup:
-	$(call setup_env,tf_backend)
+tf_init:
+	terraform -chdir=$(FOLDER) init \
+	-backend-config "bucket=${bucket}" \
+	-backend-config "profile=${profile}" \
+	-backend-config "region=${region}" \
+	-backend-config "key=$(FOLDER).tfstate" \
+	-backend-config "role_arn=${role_arn}"
 
-load_tf_vars:
-	$(call setup_env,tf_configs)
+tf_apply:
+	terraform -chdir=$(FOLDER) apply -auto-approve -lock=false
 
-grafana:
-	cd ./grafana && $(MAKE) run
+tf_destroy:
+	terraform -chdir=$(FOLDER) destroy -auto-approve -lock=false
+
+make_run:
+	cd $(FOLDER) && $(MAKE) run
+
+grafana: FOLDER=grafana
+grafana: tf_init make_run tf_apply
+
+namespace: FOLDER=namespace
+namespace: tf_init tf_apply
+
+prometheus-operator: FOLDER=prometheus-operator
+prometheus-operator: tf_init tf_apply
+
+prometheus: FOLDER=prometheus
+prometheus: tf_init tf_apply
+
+pushgateway: FOLDER=pushgateway
+pushgateway: tf_init tf_apply
+
+state-metrics: FOLDER=state-metrics
+state-metrics: tf_init tf_apply
+
+node-exporter: FOLDER=node-exporter
+node-exporter: tf_init tf_apply

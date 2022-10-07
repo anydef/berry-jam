@@ -1,4 +1,4 @@
-resource "kubernetes_deployment_v1" "grafana" {
+resource "kubernetes_deployment_v1" "pushgateway" {
   metadata {
     name      = var.name
     namespace = var.namespace
@@ -18,36 +18,25 @@ resource "kubernetes_deployment_v1" "grafana" {
         }
       }
       spec {
-
         container {
           name  = var.name
-          image = var.grafana_image
+          image = var.image
           port {
-            container_port = 3000
+            container_port = 9091
           }
           resources {
             requests = {
-              cpu    = "100m"
-              memory = "200Mi"
+              cpu    = "50m"
+              memory = "100Mi"
             }
           }
           liveness_probe {
             http_get {
-              path = "/${var.context_path}/api/health"
-              port = 3000
+              path = "/"
+              port = 9091
             }
             initial_delay_seconds = 5
             period_seconds        = 5
-          }
-          volume_mount {
-            mount_path = "/var/lib/grafana"
-            name       = "grafana-storage"
-          }
-        }
-        volume {
-          name = "grafana-storage"
-          persistent_volume_claim {
-            claim_name = kubernetes_persistent_volume_claim_v1.grafana.metadata[0].name
           }
         }
       }
@@ -55,7 +44,7 @@ resource "kubernetes_deployment_v1" "grafana" {
   }
 }
 
-resource "kubernetes_service_v1" "grafana" {
+resource "kubernetes_service_v1" "pushgateway" {
   metadata {
     name      = var.name
     namespace = var.namespace
@@ -65,14 +54,14 @@ resource "kubernetes_service_v1" "grafana" {
       app = var.name
     }
     port {
-      port        = 3000
-      target_port = 3000
+      port        = 9091
+      target_port = 9091
     }
     type = "LoadBalancer"
   }
 }
 
-resource "kubernetes_ingress_v1" "grafana" {
+resource "kubernetes_ingress_v1" "pushgateway" {
   metadata {
     name        = var.name
     namespace   = var.namespace
@@ -88,7 +77,7 @@ resource "kubernetes_ingress_v1" "grafana" {
           path = "/${var.context_path}"
           backend {
             service {
-              name = kubernetes_service_v1.grafana.metadata[0].name
+              name = kubernetes_service_v1.pushgateway.metadata[0].name
               port { number = 3000 }
             }
           }
