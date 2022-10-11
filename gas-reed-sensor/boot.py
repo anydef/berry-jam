@@ -25,8 +25,9 @@ def init():
 
     while not wlan.isconnected():
         led.on()
-        sleep(0.5)
+        sleep(0.25)
         led.off()
+        sleep(0.25)
 
     print(wlan.ifconfig())
 

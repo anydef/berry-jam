@@ -2,8 +2,8 @@ import uasyncio as asyncio
 
 
 class Meter(object):
-    def __init__(self):
-        self.__counter = 0
+    def __init__(self, init_value=0):
+        self.__counter = init_value
         self.mutex = asyncio.Lock()
 
     async def inc(self, count=1):

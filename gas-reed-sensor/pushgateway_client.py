@@ -44,17 +44,13 @@ def send(metric_name, metric_value, metric_type):
         sock.close()
 
 
-def send_gas_meter_count(value):
-    send('gas_meter_counter', value, 'COUNTER')
-
-
-def send_gas_meter_count_m3(value):
-    send('gas_meter_counter_m3', value, 'COUNTER')
+def send_gas_meter_reading(value):
+    send('gas_meter_reading', value, 'GAUGE')
 
 
 def send_gas_meter_total(value):
-    send('gas_meter_counter_total', value, 'GAUGE')
+    send('gas_meter_counter_total', value, 'COUNTER')
 
 
-def send_heartbeat():
-    send('gas_meter_heartbeat', 1, 'GAUGE')
+def send_heartbeat(val=1):
+    send('gas_meter_heartbeat', val, 'GAUGE')

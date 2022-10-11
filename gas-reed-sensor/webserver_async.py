@@ -1,78 +1,83 @@
 import gc
 
+import persistence
 import pico_time
 from reed import Meter
 
 
-class WebServer(object):
-    def __init__(self, reed_counter: Meter):
-        self.__reed_counter = reed_counter
-
-    def metrics_handler(self, path, query, method, protocol, uri):
-        return 200, 'gas_meter_counter {unit="0.01m3"} %s' % self.__reed_counter.value, None
-
-    def root_handler(self, **kwargs):
-        return 200, f"""serving. system time: {pico_time.local_time()}""", None
-
-    def checkpoints(self):
-        with open('persistence.txt', 'r') as f:
-            lines = f.readlines()
-        return 200, ''.join(lines), "text/csv"
-
-    def not_found(self, **kwargs):
-        return 404, "Requested resource not found", None
-
-    def system_status_handler(self, **kwargs):
-        return 200, '''RAM allocated: {alloc} 
-        RAM free: {free}'''.format(alloc=str(gc.mem_alloc()), free=str(gc.mem_free())), None
-
-    def process(self, path, query, method, protocol, uri):
-        if path == '/': return self.root_handler(path=path, query=query, method=method, protocol=protocol, uri=uri)
-        if path == '/metrics': return self.metrics_handler(path=path, query=query, method=method, protocol=protocol,
-                                                           uri=uri)
-        if path == '/checkpoints': return self.checkpoints()
-        if path == '/status': return self.system_status_handler(path=path, query=query, method=method,
-                                                                protocol=protocol, uri=uri)
-        return self.not_found()
-
-    async def write_response(self, writer, status, response, content_type="text/html"):
-        writer.write('HTTP/1.1 {status} OK\r\nContent-type: {content_type}\r\n\r\n'.format(status=status,
-                                                                                           content_type=content_type))
-        writer.write(response)
-        await writer.drain()
-        await writer.wait_closed()
+async def write_response(writer, status, response, content_type):
+    if not content_type:
+        content_type = "text/html"
+    writer.write(
+        f'HTTP/1.1 {status} OK\r\nContent-type: {content_type}\r\n\r\n')
+    writer.write(response)
+    await writer.drain()
+    await writer.wait_closed()
 
 
-def create_server(reed_counter):
+def create_server(reed_counter: Meter):
     try:
-        webserver = WebServer(reed_counter)
+
+        async def root_handler(**kwargs):
+            return (200, f"""serving. system time: {pico_time.local_time()}""", None)
+
+        async def metrics(**kwargs):
+            return (200, 'gas_meter_counter_total {unit="0.01m3"} %s' % reed_counter.value, None)
+
+        async def checkpoint(**kwargs):
+            line = persistence.last_checkpoint()
+            return (200, line, "text/csv")
+
+        async def checkpoints(**kwargs):
+            lines = persistence.checkpoints()
+            return (200, ''.join(lines), "text/csv")
+
+        async def not_found(**kwargs):
+            return (404, "Requested resource not found", None)
+
+        async def set_meter_value(**kwargs):
+            new_val = int(kwargs['body'].decode())
+            old_value = reed_counter.value
+            await reed_counter.reset(new_val)
+            persistence.persist_checkpoint(new_val)
+            return (200, f"old value: {old_value}. new value: {new_val}", "text/html")
+
+        handlers = {
+            'GET': {
+                '/': root_handler,
+                '/metrics': metrics,
+                '/checkpoint': checkpoint,
+                '/checkpoints': checkpoints,
+            },
+            'POST': {
+                '/meter': set_meter_value
+            }
+        }
 
         async def serve_client(reader, writer):
             try:
                 request_line = await reader.readline()
+                print(f"Request {request_line}")
 
-                while await reader.readline() != b"\r\n":
-                    pass
+                lines = request_line
+
+                while lines != b"\r\n":
+                    lines = await reader.readline()
 
                 request = request_line.decode("utf-8")
-                print("Request string:", request)
                 method, uri, protocol = request.split(" ")
 
-                print(method, uri, protocol)
-                if method != 'GET':
-                    await webserver.write_response(writer, 405, "Method not supported")
-                    return
+                body = await reader.read(1024) if method == 'POST' else b''
 
-                q_arr = uri.split("?")
-                path = q_arr[0]
-                query = q_arr[1] if len(q_arr) > 1 else ''
-
-                status, response, content_type = webserver.process(path=path, query=query, method=method,
-                                                                   protocol=protocol, uri=uri)  # type: ignore
-
-                await webserver.write_response(writer, status=status, response=response,
-                                               content_type=content_type)  # type: ignore
-                print("Client disconnected.")
+                query_params = uri.split("?")
+                path = query_params[0]
+                query = query_params[1] if len(query_params) > 1 else ''
+                handler = handlers.get(method, {}).get(path, not_found)
+                # type: ignore
+                status, response, content_type = await handler(path=path, query=query, method=method, protocol=protocol, uri=uri, body=body)
+                # type: ignore
+                # type: ignore
+                await write_response(writer, status, response, content_type)
             except Exception as e:
                 print(e)
             finally:
