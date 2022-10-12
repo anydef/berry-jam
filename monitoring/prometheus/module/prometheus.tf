@@ -8,6 +8,7 @@ resource "kubernetes_manifest" "prometheus_monitoring_prometheus_persistant" {
       "namespace" = var.namespace
     }
     "spec" = {
+      "image" = "quay.io/prometheus/prometheus:v2.39.0"
       "replicas"  = 1
       "resources" = {
         "requests" = {
