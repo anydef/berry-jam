@@ -8,8 +8,9 @@ resource "kubernetes_manifest" "servicemonitor_monitoring_kube_state_metrics" {
         "app.kubernetes.io/name"      = "kube-state-metrics"
         "app.kubernetes.io/part-of"   = "kube-prometheus"
         "app.kubernetes.io/version"   = "1.9.7"
-        "name"                        = "kube-state-metrics"
         "prometheus-enabled"          = "true"
+        "name"                        = "kube-state-metrics"
+        "app"                         = "kube-state-metrics"
       }
       "name"      = "kube-state-metrics"
       "namespace" = var.namespace

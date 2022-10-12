@@ -6,6 +6,7 @@ resource "kubernetes_manifest" "servicemonitor_monitoring_kubelet" {
       "labels" = {
         "app.kubernetes.io/name" = "kubelet"
         "name"                   = "kubelet"
+        "app"                    = "kubelet"
       }
       "name"      = "kubelet"
       "namespace" = var.namespace

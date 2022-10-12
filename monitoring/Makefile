@@ -37,6 +37,9 @@ prometheus-operator: tf_init tf_apply
 prometheus: FOLDER=prometheus
 prometheus: tf_init tf_apply
 
+prometheus-destroy: FOLDER=prometheus
+prometheus-destroy: tf_init tf_destroy
+
 pushgateway: FOLDER=pushgateway
 pushgateway: tf_init tf_apply
 
