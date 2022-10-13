@@ -1,5 +1,3 @@
-import gc
-
 import persistence
 import pico_time
 from reed import Meter
@@ -74,7 +72,8 @@ def create_server(reed_counter: Meter):
                 query = query_params[1] if len(query_params) > 1 else ''
                 handler = handlers.get(method, {}).get(path, not_found)
                 # type: ignore
-                status, response, content_type = await handler(path=path, query=query, method=method, protocol=protocol, uri=uri, body=body)
+                status, response, content_type = await handler(path=path, query=query, method=method, protocol=protocol,
+                                                               uri=uri, body=body)
                 # type: ignore
                 # type: ignore
                 await write_response(writer, status, response, content_type)

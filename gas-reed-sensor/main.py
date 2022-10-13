@@ -65,6 +65,7 @@ async def heartbeat_metric(delay):
 async def flush_meter(meter, delay):
     while True:
         persistence.persist_meter_status(meter.value)
+        persistence.persist_checkpoint(meter.value)
         await asyncio.sleep(delay)
 
 
