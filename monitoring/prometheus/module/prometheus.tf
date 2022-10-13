@@ -18,7 +18,8 @@ resource "kubernetes_manifest" "prometheus_monitoring_prometheus_persistant" {
       "nodeSelector" = {
         "node-type" = "worker"
       }
-      "retention"       = "10d"
+      "retention"       = "30d"
+      "retentionSize" = "500MB"
       "securityContext" = {
         "fsGroup"      = 2000
         "runAsNonRoot" = true
