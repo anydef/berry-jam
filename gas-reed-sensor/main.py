@@ -10,6 +10,8 @@ import webserver_async as webserver
 from reed import AsyncPin, Meter, do_on_event
 from utils import Semaphore
 
+IRQ_BACKOFF_MS=2000
+
 print("Booting up.")
 
 onboard_led = Pin("LED", Pin.OUT)
@@ -18,7 +20,8 @@ onboard_led.off()
 meter_led = Pin(15, Pin.OUT)
 meter_led.off()
 
-reed_pin = AsyncPin(Pin(14, Pin.IN, Pin.PULL_DOWN), Pin.IRQ_RISING)
+reed_pin = AsyncPin(Pin(14, Pin.IN, Pin.PULL_DOWN),
+                    Pin.IRQ_RISING, callback_backoff=IRQ_BACKOFF_MS)
 
 checkpoint = persistence.read_checkpoint()
 
