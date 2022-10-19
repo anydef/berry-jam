@@ -17,3 +17,4 @@
 /.idea/
 /.kube/cache/
 /monitoring/prometheus/.terraform/
+./ansible/hosts
