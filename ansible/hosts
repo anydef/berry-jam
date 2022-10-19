@@ -1,7 +1,0 @@
-[controller]
-berry-main.local ansible_connection=ssh  ansible_user=pi ansible_host=192.168.178.56
-
-[worker]
-berry-n1.local ansible_connection=ssh  ansible_user=pi ansible_host=192.168.178.57
-berry-n2.local ansible_connection=ssh  ansible_user=pi ansible_host=192.168.178.55
-berry-n3.local ansible_connection=ssh  ansible_user=pi ansible_host=192.168.178.59
