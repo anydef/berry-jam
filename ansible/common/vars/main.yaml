@@ -10,3 +10,4 @@ pkgstoinstall:
   - vim
   - ca-certificates
   - apt-transport-https
+  - nfs-common

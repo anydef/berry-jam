@@ -16,10 +16,9 @@ resource "kubernetes_manifest" "prometheus_monitoring_prometheus_persistant" {
         }
       }
       "nodeSelector" = {
-        "node-type" = "worker"
+        "node-type" = "controller"
       }
-      "retention"       = "30d"
-      "retentionSize" = "500MB"
+      "retention"       = var.retention
       "securityContext" = {
         "fsGroup"      = 2000
         "runAsNonRoot" = true
@@ -37,7 +36,6 @@ resource "kubernetes_manifest" "prometheus_monitoring_prometheus_persistant" {
               "kubelet",
               "traefik",
               "pushgateway"
-#              "grafana",
             ]
           }
         ]

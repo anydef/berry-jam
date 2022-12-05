@@ -1,5 +1,5 @@
 module "grafana" {
-  source        = "./module"
+  source        = "git@github.com:anydef/tf-modules.git//grafana"
   name          = "grafana"
   namespace     = var.namespace
   storage       = var.grafana_storage

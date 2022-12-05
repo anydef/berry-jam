@@ -1,7 +1,19 @@
 ---
-- name: Log worker node info.
+- name: Log node info.
   debug:
     msg: "Tagging nodes. Host: {{ ansible_host }}. Hostname {{ ansible_hostname }}"
+
+
+- name: Assign controller tags.
+  shell: |
+    controllers=$(kubectl get nodes -o jsonpath="{.items[*].metadata.name}" --selector='node-role.kubernetes.io/master')
+    for node in "${controllers}"
+    do
+      kubectl label nodes $node kubernetes.io/role=controller --overwrite
+      kubectl label nodes $node node-type=controller --overwrite
+    done
+  args:
+    executable: /bin/bash
 
 
 - name: Assign worker tags.

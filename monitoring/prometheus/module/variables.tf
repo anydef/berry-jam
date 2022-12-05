@@ -29,5 +29,9 @@ variable "context_path" {
 
 variable "deployment_name" {
   type = string
-  default = "cluster-monitoring"
+}
+
+variable "retention" {
+  type = string
+  default = "30d"
 }

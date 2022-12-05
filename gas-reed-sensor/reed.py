@@ -36,7 +36,7 @@ class AsyncPin:
         if time.ticks_diff(now, self.last_tick) > self.callback_backoff:
             self.flag.set()
 
-        self.last_tick = time.ticks_ms()
+        self.last_tick = now
 
     def value(self):
         return self.pin.value()

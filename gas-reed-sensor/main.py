@@ -10,7 +10,7 @@ import webserver_async as webserver
 from reed import AsyncPin, Meter, do_on_event
 from utils import Semaphore
 
-IRQ_BACKOFF_MS=2000
+IRQ_BACKOFF_MS = 3000
 
 print("Booting up.")
 
@@ -62,7 +62,8 @@ async def heartbeat_metric(delay):
     while True:
         await asyncio.sleep(delay)
 
-        pushgateway_client.send_heartbeat(1 if heartbeat_semaphore.toggle() else 0)
+        pushgateway_client.send_heartbeat(
+            1 if heartbeat_semaphore.toggle() else 0)
 
 
 async def flush_meter(meter, delay):
