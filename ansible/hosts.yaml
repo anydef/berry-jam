@@ -8,15 +8,15 @@ all:
           ansible_host: 192.168.178.75
     worker:
       hosts:
-        berry-controller-1.local:
+        berry-worker-1.local:
           ansible_connection: ssh
           ansible_user: pi
           ansible_host: 192.168.178.56
-        berry-controller-2.local:
+        berry-worker-2.local:
           ansible_connection: ssh
           ansible_user: pi
           ansible_host: 192.168.178.55
-        berry-controller-3.local:
+        berry-worker-3.local:
           ansible_connection: ssh
           ansible_user: pi
           ansible_host: 192.168.178.57

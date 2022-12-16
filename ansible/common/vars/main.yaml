@@ -11,3 +11,4 @@ pkgstoinstall:
   - ca-certificates
   - apt-transport-https
   - nfs-common
+  - open-iscsi

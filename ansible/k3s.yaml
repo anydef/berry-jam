@@ -36,3 +36,8 @@
   become: yes
   roles:
     - { role: k3s-tag, tags: [ k3s-tag, k3s-controller ] }
+
+- hosts: controller
+  become: yes
+  roles:
+    - { role: nfs-server, tags: [ nfs-node ] }

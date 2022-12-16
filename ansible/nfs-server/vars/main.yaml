@@ -1,0 +1,4 @@
+---
+share: "/opt/nfs/share"
+options: "192.168.178.0/24(rw,sync,root_squash,no_subtree_check)"
+permission: '0777'

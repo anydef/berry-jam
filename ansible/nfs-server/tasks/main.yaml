@@ -1,0 +1,41 @@
+---
+- name: Create a mountable directory if it does not exist
+  file:
+    path: "{{ share }}"
+    state: directory
+    owner: nobody
+    group: nogroup
+    mode: "{{ permission }}"
+
+- name: Mount
+  ansible.posix.mount:
+    path: /opt/nfs
+    src: LABEL=NFS
+    fstype: ext4
+    state: mounted
+
+- name: install nfs-server
+  apt:
+    name: "nfs-kernel-server"
+    state: latest
+    allow_unauthenticated: true
+    update_cache: yes
+    autoremove: yes
+
+
+- name: share in /etc/exports file
+  ansible.builtin.lineinfile:
+    path: /etc/exports
+    state: present
+    line: '{{ share }} {{ options }}'
+
+- name: export share
+  ansible.builtin.command: "exportfs -rav"
+
+- name: Restart NFS server
+  ansible.builtin.systemd:
+    state: restarted
+    daemon_reload: yes
+    name: nfs-kernel-server
+
+

@@ -3,6 +3,14 @@
   debug:
     msg: "The distro is: {{ ansible_distribution|lower }} and the version name is: {{ ansible_distribution_release }}"
 
+
+- name: Update GPG key for focal distribution
+  shell: |
+    export DISTRO=focal-stable
+    wget -O - apt.radxa.com/$DISTRO/public.key | sudo apt-key add -
+  when: ansible_distribution_release == "focal"
+
+
 - name: Update apt packages
   become: true
   apt:
