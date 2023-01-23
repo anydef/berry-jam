@@ -16,6 +16,9 @@ tf_init:
 	-backend-config "key=$(FOLDER).tfstate" \
 	-backend-config "role_arn=${role_arn}"
 
+tf_refresh:
+	terraform -chdir=$(FOLDER) refresh
+
 tf_apply:
 	terraform -chdir=$(FOLDER) apply -auto-approve -lock=false
 
@@ -25,11 +28,18 @@ tf_destroy:
 make_run:
 	cd $(FOLDER) && $(MAKE) run
 
+persistence: FOLDER=persistence
+persistence: tf_init tf_refresh tf_apply
+
 grafana: FOLDER=grafana
-grafana: tf_init make_run tf_apply
+grafana: tf_init tf_refresh tf_apply
+#grafana: tf_init make_run tf_apply
+
+grafana-destroy: FOLDER=grafana
+grafana-destroy: tf_init tf_refresh tf_destroy
 
 namespace: FOLDER=namespace
-namespace: tf_init tf_apply
+namespace: tf_init tf_refresh tf_apply
 
 prometheus-operator: FOLDER=prometheus-operator
 prometheus-operator: tf_init tf_apply
