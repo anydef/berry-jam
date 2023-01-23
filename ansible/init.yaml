@@ -1,0 +1,11 @@
+---
+- hosts: rockpi
+  become: yes
+  roles:
+    - { role: radxa, tags: radxa}
+
+  tasks:
+    - name: Ready
+      debug:
+        msg:
+          - "Rock pi init is ready!"

@@ -1,0 +1,11 @@
+---
+- hosts: all
+  become: yes
+  roles:
+    - { role: usermanagement, tags: usermanagement}
+
+  tasks:
+    - name: Ready
+      debug:
+        msg:
+          - "Instances are ready with new users!"

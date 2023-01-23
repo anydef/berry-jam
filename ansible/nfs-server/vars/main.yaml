@@ -2,3 +2,4 @@
 share: "/opt/nfs/share"
 options: "192.168.178.0/24(rw,sync,root_squash,no_subtree_check)"
 permission: '0777'
+nfs_device_uuid: '3afff940-e384-4049-92de-8b4bcec383d5'

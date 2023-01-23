@@ -1,0 +1,10 @@
+all:
+  children:
+    rockpi: ### aka controller. used for init setup
+      hosts:
+        berry-controller-1.local:
+          ansible_connection: ssh
+          ansible_ssh_user: rock
+          ansible_ssh_pass: rock
+          ansible_host: 192.168.178.75
+

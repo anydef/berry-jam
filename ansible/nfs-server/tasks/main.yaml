@@ -9,10 +9,23 @@
 
 - name: Mount
   ansible.posix.mount:
-    path: /opt/nfs
-    src: LABEL=NFS
+    path: "{{ share }}"
+    src: UUID={{ nfs_device_uuid }}
     fstype: ext4
     state: mounted
+
+- name: create mount points for different services
+  file:
+    path: "{{ share }}/{{ item }}"
+    state: directory
+    owner: nobody
+    group: nogroup
+    mode: "{{ permission }}"
+  loop:
+    - grafana
+    - prometheus_cluster_monitoring
+    - prometheus_home_automation
+    - test
 
 - name: install nfs-server
   apt:
@@ -26,6 +39,7 @@
 - name: share in /etc/exports file
   ansible.builtin.lineinfile:
     path: /etc/exports
+    create: true
     state: present
     line: '{{ share }} {{ options }}'
 
@@ -35,7 +49,17 @@
 - name: Restart NFS server
   ansible.builtin.systemd:
     state: restarted
+    enabled: true
     daemon_reload: yes
     name: nfs-kernel-server
+
+- name: Run rpc-statd
+  ansible.builtin.systemd:
+    enabled: true
+    daemon_reload: yes
+    name: rpc-statd
+  loop:
+    - rpc-statd
+    - nfs-common
 
 

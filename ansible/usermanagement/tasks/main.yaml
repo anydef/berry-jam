@@ -1,0 +1,39 @@
+---
+- name: Log Linux distro
+  debug:
+    msg: "The distro is: {{ ansible_distribution|lower }} and the version name is: {{ ansible_distribution_release }}"
+
+- name: Create login user
+  user:
+    name: "{{ username }}"
+    password: "{{ password_sha }}"
+    groups: # Empty by default, here we give it some groups
+      - sudo
+    state: present
+    shell: /bin/bash       # Defaults to /bin/bash
+    system: yes             # Defaults to no
+    createhome: yes        # Defaults to yes
+    home: /home/{{ username }}  # Defaults to /home/<username>
+
+- name: Add user to the sudoers
+  ansible.builtin.lineinfile:
+    create: true
+    path: "/etc/sudoers.d/{{ username }}"
+    state: present
+    line: "{{ username }} ALL=(ALL) NOPASSWD: ALL"
+
+- name: Set authorized key
+  authorized_key:
+    user: "{{ username }}"
+    state: present
+    key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+
+- name: Disable default users
+  ansible.builtin.user:
+    name: "{{ item }}"
+    state: present
+    password_lock: true
+    shell: "/sbin/nologin"
+  loop:
+    - rock
+    - pi
