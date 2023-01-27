@@ -16,5 +16,6 @@
 /monitoring/node-exporter/.terraform/
 /.idea/
 /.kube/cache/
-/monitoring/prometheus/.terraform/
 ./ansible/hosts
+/monitoring/prometheus-home-automation/.terraform/
+/monitoring/prometheus-cluster-monitoring/.terraform/

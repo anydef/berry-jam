@@ -31,7 +31,7 @@ In my case:
 `ssh-copy-id -i ~/.ssh/id_rsa.pub pi@berry-worker-3.local`
 
 4. Deploy k3s via ansible
-`pushd ansible && ansible-playbook -i hosts k3s.yaml && popd`
+`pushd ansible && ansible-playbook -i hosts.yaml k3s.yaml && popd`
 
 
 ## Rock PI bootstrap:
@@ -53,3 +53,18 @@ Edit `/etc/hosts` and add `berry-controller-1`
 
 `ssh-copy-id -i ~/.ssh/id_rsa.pub pi@berry-controller-1.local`
 
+
+
+## Install auto update controller
+
+rkubectl apply -f https://github.com/rancher/system-upgrade-controller/releases/latest/download/system-upgrade-controller.yaml
+
+
+##TODO: 
+add missing
+NFS disk mount to NFS ansible
+```ssh 
+pi@berry-controller-1:~$ #sudo e2label /dev/sda1 "NFS"
+pi@berry-controller-1:~$ mount -t ext4 | grep /dev/sda1
+pi@berry-controller-1:~$ sudo e2label /dev/sda1 "NFS"
+```

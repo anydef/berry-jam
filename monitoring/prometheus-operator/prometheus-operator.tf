@@ -1,4 +1,4 @@
 module "prometheus-operator" {
-  source    = "./module"
+  source    = "git@github.com:anydef/tf-modules.git//prometheus-operator"
   namespace = var.namespace
 }

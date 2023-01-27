@@ -1,4 +1,4 @@
 module "state-metrics" {
-  source = "./module"
+  source = "git@github.com:anydef/tf-modules.git//state-metrics"
   namespace = var.namespace
 }

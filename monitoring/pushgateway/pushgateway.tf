@@ -1,5 +1,5 @@
 module "pushgateway" {
-  source = "./module"
+  source = "git@github.com:anydef/tf-modules.git//pushgateway"
   name = "pushgateway"
   namespace = var.namespace
 }

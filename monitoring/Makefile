@@ -17,7 +17,9 @@ tf_init:
 	-backend-config "role_arn=${role_arn}"
 
 tf_refresh:
+	terraform -chdir=$(FOLDER) get -update
 	terraform -chdir=$(FOLDER) refresh
+
 
 tf_apply:
 	terraform -chdir=$(FOLDER) apply -auto-approve -lock=false
@@ -42,13 +44,20 @@ namespace: FOLDER=namespace
 namespace: tf_init tf_refresh tf_apply
 
 prometheus-operator: FOLDER=prometheus-operator
-prometheus-operator: tf_init tf_apply
+prometheus-operator: tf_init tf_refresh tf_apply
 
-prometheus: FOLDER=prometheus
-prometheus: tf_init tf_apply
+prometheus-home-automation: FOLDER=prometheus-home-automation
+prometheus-home-automation: tf_init tf_refresh tf_apply
 
-prometheus-destroy: FOLDER=prometheus
-prometheus-destroy: tf_init tf_destroy
+prometheus-home-automation-destroy: FOLDER=prometheus-home-automation
+prometheus-home-automation-destroy: tf_init tf_destroy
+
+prometheus-cluster-monitoring: FOLDER=prometheus-cluster-monitoring
+prometheus-cluster-monitoring: tf_init tf_refresh tf_apply
+
+prometheus-cluster-monitoring-destroy: FOLDER=prometheus-cluster-monitoring
+prometheus-cluster-monitoring-destroy: tf_init tf_refresh tf_destroy
+
 
 pushgateway: FOLDER=pushgateway
 pushgateway: tf_init tf_apply
