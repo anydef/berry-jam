@@ -82,3 +82,9 @@ node-exporter: tf_init tf_refresh tf_apply
 
 node-exporter-destroy: FOLDER=node-exporter
 node-exporter-destroy: tf_init tf_refresh tf_destroy
+
+fritz-exporter: FOLDER=fritz-exporter
+fritz-exporter: tf_init tf_refresh tf_apply
+
+fritz-exporter-destroy: FOLDER=fritz-exporter
+fritz-exporter-destroy: tf_init tf_destroy

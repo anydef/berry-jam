@@ -20,3 +20,4 @@
 /monitoring/prometheus-home-automation/.terraform/
 /monitoring/prometheus-cluster-monitoring/.terraform/
 /monitoring/persistence/.terraform/
+/monitoring/fritz-exporter/.terraform/

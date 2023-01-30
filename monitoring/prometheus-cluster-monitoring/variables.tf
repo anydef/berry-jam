@@ -27,5 +27,6 @@ variable "service_monitor_selector_apps" {
     "node-exporter",
     "kubelet",
     "traefik",
+    "fritz-exporter",
   ]
 }
