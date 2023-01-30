@@ -46,6 +46,10 @@ namespace: tf_init tf_refresh tf_apply
 prometheus-operator: FOLDER=prometheus-operator
 prometheus-operator: tf_init tf_refresh tf_apply
 
+prometheus-operator-destroy: FOLDER=prometheus-operator
+prometheus-operator-destroy: tf_init tf_refresh tf_destroy
+
+
 prometheus-home-automation: FOLDER=prometheus-home-automation
 prometheus-home-automation: tf_init tf_refresh tf_apply
 
@@ -60,10 +64,21 @@ prometheus-cluster-monitoring-destroy: tf_init tf_refresh tf_destroy
 
 
 pushgateway: FOLDER=pushgateway
-pushgateway: tf_init tf_apply
+pushgateway: tf_init tf_refresh tf_apply
+
+pushgateway-destroy: FOLDER=pushgateway
+pushgateway-destroy: tf_init tf_destroy
+
 
 state-metrics: FOLDER=state-metrics
-state-metrics: tf_init tf_apply
+state-metrics: tf_init tf_refresh tf_apply
+
+state-metrics-destroy: FOLDER=state-metrics
+state-metrics-destroy: tf_init tf_refresh tf_destroy
+
 
 node-exporter: FOLDER=node-exporter
-node-exporter: tf_init tf_apply
+node-exporter: tf_init tf_refresh tf_apply
+
+node-exporter-destroy: FOLDER=node-exporter
+node-exporter-destroy: tf_init tf_refresh tf_destroy

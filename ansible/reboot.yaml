@@ -1,0 +1,12 @@
+---
+- hosts: all
+  become: yes
+
+  tasks:
+    - name: Reboot
+      reboot:
+
+    - name: Ready
+      debug:
+        msg:
+          - "Reboot ready!"

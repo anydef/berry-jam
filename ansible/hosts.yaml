@@ -20,3 +20,9 @@ all:
           ansible_connection: ssh
           ansible_user: anydef
           ansible_host: 192.168.178.57
+    frontend:
+      hosts:
+        frontend-pi.local:
+          ansible_connection: ssh
+          ansible_user: anydef
+          ansible_host: 192.168.178.59
