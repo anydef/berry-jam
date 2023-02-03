@@ -30,6 +30,9 @@ tf_destroy:
 make_run:
 	cd $(FOLDER) && $(MAKE) run
 
+secrets: FOLDER=secrets
+secrets: tf_init tf_refresh tf_apply
+
 persistence: FOLDER=persistence
 persistence: tf_init tf_refresh tf_apply
 
@@ -88,3 +91,9 @@ fritz-exporter: tf_init tf_refresh tf_apply
 
 fritz-exporter-destroy: FOLDER=fritz-exporter
 fritz-exporter-destroy: tf_init tf_destroy
+
+viessmann-exporter: FOLDER=viessmann-exporter
+viessmann-exporter: tf_init tf_refresh tf_apply
+
+secrets: FOLDER=secrets
+secrets: tf_init tf_refresh tf_apply
