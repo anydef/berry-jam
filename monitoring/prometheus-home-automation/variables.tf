@@ -23,6 +23,7 @@ variable "nfs_server" {
 variable "service_monitor_selector_apps" {
   type = list(string)
   default = [
-    "pushgateway"
+    "pushgateway",
+    "viessmann-exporter",
   ]
 }
