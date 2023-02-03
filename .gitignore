@@ -5,6 +5,7 @@
 /monitoring/vendor/
 *.lock.hcl
 */.terraform
+**/.terraform
 /monitoring/tf_backend.env
 /monitoring/grafana/.env
 /monitoring/grafana/.terraform/
@@ -21,3 +22,4 @@
 /monitoring/prometheus-cluster-monitoring/.terraform/
 /monitoring/persistence/.terraform/
 /monitoring/fritz-exporter/.terraform/
+*/.dockerconfigjson
