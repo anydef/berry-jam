@@ -42,6 +42,9 @@ grafana: tf_init tf_refresh tf_apply
 
 grafana-destroy: FOLDER=grafana
 grafana-destroy: tf_init tf_refresh tf_destroy
+# if stuck on pvc destroy step then execute following:
+# rkubectl  patch pv grafana -p '{"spec":{"claimRef": null}}'
+# rkubectl -n monitoring patch pvc grafana -p '{"metadata":{"finalizers":null}}'
 
 namespace: FOLDER=namespace
 namespace: tf_init tf_refresh tf_apply
