@@ -2,7 +2,7 @@ all:
   children:
     controller:
       hosts:
-        berry-controller-1.local:
+        berry-main.local:
           ansible_connection: ssh
           ansible_user: anydef
           ansible_host: 192.168.178.75
