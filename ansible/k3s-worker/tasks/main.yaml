@@ -4,7 +4,7 @@
     msg: "Provisioning k3s worker node. Host: {{ ansible_host }}. Hostname {{ ansible_hostname }}"
 
 
-- name:
+- name: Print token
   debug:
     msg: "[Worker] K8S_TOKEN_HOLDER K8S token is {{ hostvars['k8s_token_holder']['token'] }} from {{ hostvars['k8s_token_holder']['ip'] }}"
 
