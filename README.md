@@ -54,6 +54,36 @@ Edit `/etc/hosts` and add `berry-controller-1`
 `ssh-copy-id -i ~/.ssh/id_rsa.pub pi@berry-controller-1.local`
 
 
+Delete default rock user:
+`sudo deluser rock`
+`id rock` ### should return no users
+
+If running on ubntu focal, radxa apt port might have outdated signatures, if so, when running `apt update` you will see something like:
+```
+W: GPG error: http://apt.radxa.com/focal-stable focal InRelease: The following signatures couldn't be verified because the public key is not available: NO_PUBKEY 9B98116C9AA302C7
+E: The repository 'http://apt.radxa.com/focal-stable focal InRelease' is not signed.
+N: Updating from such a repository can't be done securely, and is therefore disabled by default.
+N: See apt-secure(8) manpage for repository creation and user configuration details.
+```
+
+If that is the case run:
+```
+export DISTRO=focal-stable
+wget -O - apt.radxa.com/$DISTRO/public.key | sudo apt-key add -
+```
+
+Now we can update to ubuntu jammy (22.04):
+
+```
+sudo apt update 
+sudo apt upgrade
+sudo apt dist-upgrade
+
+sudo apt autoremove
+sudo apt install update-manager-core
+
+sudo do-release-upgrade 
+```
 
 ## Install auto update controller
 
